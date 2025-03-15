@@ -48,6 +48,10 @@ function Thumb(_ref) {
     initialized = true;
     const SwiperClass = swiper.constructor;
     if (thumbsParams.swiper instanceof SwiperClass) {
+      if (thumbsParams.swiper.destroyed) {
+        initialized = false;
+        return false;
+      }
       swiper.thumbs.swiper = thumbsParams.swiper;
       Object.assign(swiper.thumbs.swiper.originalParams, {
         watchSlidesProgress: true,
