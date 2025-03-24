@@ -57,14 +57,28 @@ export const getUserOrders = async (req, res) => {
     }
 };
 
+
 // ✅ 1. Get all orders (Admin)
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
-            .populate("userId", "name email")  // User details fetch karne ke liye
-            .sort({ createdAt: -1 });
+        .populate("items.productId", "title price img discount")  // ✅ Yeh ensure karega ki product ki details aayein
+            .populate("userId", "name email profilePicture")  // User details fetch karne ke liye
+            .sort({ createdAt: -1 })
+            .lean();
 
-        res.status(200).json(orders);
+            const updatedOrders = orders.map(order => ({
+                ...order,
+                userId: {
+                    ...order.userId,
+                    profilePicture: order.userId?.profilePicture
+                        ? `http://localhost:5000${order.userId.profilePicture}`
+                        : "/backend/uploads/1741196388847-tushal link.jpg"
+                }
+            }));
+
+            console.log("Orders Fetched:", JSON.stringify(orders, null, 2));
+        res.status(200).json(updatedOrders);
     } catch (error) {
         console.error("Get all orders error:", error);
         res.status(500).json({ error: "Failed to fetch orders" });

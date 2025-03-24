@@ -19,23 +19,27 @@ export const submitContactForm = async (req, res) => {
   }
 };
 
-// ✅ Get All Contact Messages (For Admin)
-export const getAllMessages = async (req, res) => {
+export const getAllContacts = async (req, res) => {
   try {
-    const messages = await Contact.find().sort({ createdAt: -1 });
-    res.status(200).json(messages);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch messages" });
-  }
-};
+    const contacts = await Contact.find().sort({ updatedAt: -1 });
 
-// ✅ Delete Contact Message
-export const deleteMessage = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Contact.findByIdAndDelete(id);
-    res.status(200).json({ message: "Message deleted successfully!" });
+    // Format response
+    const formattedContacts = contacts.map((contact) => ({
+      id: contact._id,
+      name: contact.name,
+      email: contact.email,
+      message: contact.message,
+      createdAt: new Date(contact.createdAt).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    }));
+
+    res.status(200).json(formattedContacts);
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete message" });
+    res.status(500).json({ error: "Failed to fetch contacts" });
   }
 };

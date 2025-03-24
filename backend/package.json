@@ -21,9 +21,11 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^3.0.1",
     "mongoose": "^8.12.1",
     "multer": "^1.4.5-lts.1",
     "razorpay": "^2.9.6",
+    "react-hot-toast": "^2.5.2",
     "stripe": "^17.7.0"
   },
   "description": "",

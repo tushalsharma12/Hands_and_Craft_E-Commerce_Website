@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 export const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
@@ -18,4 +19,3 @@ export const authMiddleware = async (req, res, next) => {
     res.status(401).json({ error: "Invalid Token" });
   }
 };
-

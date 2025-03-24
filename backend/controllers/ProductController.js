@@ -15,7 +15,7 @@ export const getProducts = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
-};  
+};
 
 // ✅ 2. Add Product (Multer se Image Upload)
 export const addProduct = async (req, res) => {
@@ -62,15 +62,17 @@ export const updateProduct = async (req, res) => {
     // Delete old image if new image is being uploaded
     if (req.file) {
       if (existingProduct.img) {
-        
-        const oldImagePath = path.join(process.cwd(), "uploads", path.basename(existingProduct.img));
+        const oldImagePath = path.join(
+          process.cwd(),
+          "uploads",
+          path.basename(existingProduct.img)
+        );
 
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
       updatedData.img = `http://localhost:5000/uploads/${req.file.filename}`;
-
     }
 
     // Update product
@@ -110,16 +112,15 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-
 // ✅ Get Single Product by ID
 export const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-        console.log("Requested Product ID:", id); // Check karein ID aa rahi hai ya nahi
+    console.log("Requested Product ID:", id); // Check karein ID aa rahi hai ya nahi
 
-        if (!id || id.length !== 24) {
-            return res.status(400).json({ message: "Invalid Product ID" });
-        }
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ message: "Invalid Product ID" });
+    }
 
     const product = await Product.findById(req.params.id);
     if (!product) {
@@ -134,22 +135,51 @@ export const getProductById = async (req, res) => {
 
 export const searchProducts = async (req, res) => {
   try {
-      const query = req.query.query  // Ensure query exists
-      console.log("Search Query:", query); // Debugging ke liye
+    const { query } = req.query;
 
-      if (!query || query.trim() === "") {
-          return res.status(400).json({ message: "Search query is required" });
-      }
+    // If query is empty, return all products
+    if (!query) {
+      const allProducts = await Product.find();
+      return res.json(allProducts);
+    }
 
-      // MongoDB regex search (case-insensitive)
-      const products = await Product.find({
-          title: { $regex: query, $options: "i" },
-      });
+    // Search by title or category
+    const products = await Product.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } }, // Case-insensitive search in title
+        { page: { $regex: query, $options: "i" } },
+        { section: { $regex: query, $options: "i" } }, // Case-insensitive search in page
+      ],
+    });
 
-      res.json(products);
+    res.json(products);
   } catch (error) {
-      console.error("Error searching products:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
+export const getAllSections = async (req, res) => {
+  try {
+    const sections = await Product.distinct("page");
+    res.json(sections);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const filterProducts = async (req, res) => {
+  try {
+    const { page, section, title, minPrice, maxPrice, minRating, maxRating } =
+      req.query;
+    let filter = {};
+
+    if (page) filter.page = page;
+    if (section) filter.section = section;
+    if (title) filter.title = { $regex: title, $options: "i" }; // Case-insensitive search
+
+    const products = await Product.find(filter);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};

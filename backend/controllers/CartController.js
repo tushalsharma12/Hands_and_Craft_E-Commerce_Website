@@ -53,6 +53,7 @@ export const addToCart = async (req, res) => {
 export const getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user.userId }).populate("products.productId");
+    
     // if (!cart) return res.json({ cart: { products: [] } });
 
     res.json( cart || { products: [] } );
