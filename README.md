@@ -1,1 +1,1 @@
-# handcrafted-ecommerce
+# handcrafted
