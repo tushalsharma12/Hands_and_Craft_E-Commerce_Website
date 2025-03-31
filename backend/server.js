@@ -22,6 +22,11 @@ app.use("/uploads", express.static("uploads"));
 
 dotenv.config();
 
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL || "https://your-frontend-domain.vercel.app",
+//   credentials: true
+// }));
+
 app.use(express.json());
 app.use(cors());
 app.use( "/api/products",ProductRoute);
@@ -38,6 +43,9 @@ app.use("/api/order", OrderRoute);
 
 
 
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
 
 
 mongoose.connect(process.env.MONGO_URI) 
