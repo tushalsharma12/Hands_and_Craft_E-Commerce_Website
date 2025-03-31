@@ -4,14 +4,11 @@ import Contact from "../models/Contact.js";
 export const submitContactForm = async (req, res) => {
   try {
     const { name, email, message } = req.body;
-
     if (!name || !email || !message) {
       return res.status(400).json({ error: "All fields are required" });
     }
-
     const newContact = new Contact({ name, email, message });
     await newContact.save();
-
     res.status(201).json({ message: "Message sent successfully!" });
   } catch (error) {
     console.error("Error submitting contact form:", error);
@@ -19,10 +16,10 @@ export const submitContactForm = async (req, res) => {
   }
 };
 
+
 export const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ updatedAt: -1 });
-
     // Format response
     const formattedContacts = contacts.map((contact) => ({
       id: contact._id,
@@ -43,3 +40,13 @@ export const getAllContacts = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch contacts" });
   }
 };
+
+// export const deleteContact = async (req, res) => {
+//   try {
+//     const {id} = req.params;
+//     await Contact.findByIdAndDelete(id);
+//     res.status(200).json({ message: "Message deleted successfully!" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to delete message" });
+//   }
+// }

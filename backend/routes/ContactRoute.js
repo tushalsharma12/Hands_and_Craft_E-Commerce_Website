@@ -4,8 +4,7 @@ import { submitContactForm,  getAllContacts } from "../controllers/ContactContro
 const router = express.Router();
 
 router.post("/submit", submitContactForm);  // User submits contact form
-// router.get("/messages", getAllMessages);   // Admin gets all messages
-// router.delete("/messages/:id", deleteMessage); // Admin deletes a message
+// router.delete("/contacts/:id", deleteContact); // Admin deletes a message
 router.get("/getAllContacts", getAllContacts);
 
 export default router;

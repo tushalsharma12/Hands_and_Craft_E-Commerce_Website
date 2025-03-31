@@ -8,63 +8,51 @@ import Cart from "../models/Cart.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
-
   // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;       // ^ = start of the string, $ = end of the string , \s = whitespace, @ = at symbol
   if (!emailRegex.test(email)) {
     return res.status(400).json({ error: "Invalid email format" });
   }
-
   // Validate password
   // if (password.length < 6) {
   //   return res.status(400).json({ error: "Password must be at least 6 characters" });
   // }
-
   const existingUser = await User.findOne({ email });
-
   if (existingUser)
     return res.status(400).json({ error: "Email already exists" });
-
   // const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, email, password, role: "user" });
-
   await user.save();
   res.status(201).json({ message: "User registered successfully", user: user });
 };
 
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     // Step 1: Check if email matches the predefined admin email
     if (email === process.env.ADMIN_EMAIL) {
-      // Hash admin password on first deployment and store it in env
       const isAdminMatch = password === process.env.ADMIN_PASSWORD;
       if (!isAdminMatch) {
         return res.status(400).json({ error: "Invalid credentials" });
       }
       // Create admin user data
       const adminUser = {
-        _id: "admin_id_123", // Fake ID for admin
+        _id: "admin_id_123",                                                // Fake ID for admin
         name: "Admin",
         email: process.env.ADMIN_EMAIL,
         role: "admin",
       };
-
-      // Generate JWT token for admin
-      const token = jwt.sign(
+      const token = jwt.sign(                                               // Generate JWT token for admin
         { userId: adminUser._id, role: adminUser.role },
         process.env.JWT_SECRET
       );
-
       return res.json({ token, user: { ...adminUser, password: undefined } });
     }
 
     // Step 2: Normal User Login
     const user = await User.findOne({ email });
-
     if (!user) return res.status(400).json({ error: "User not found" });
-
     if (password !== user.password) {
       return res.status(400).json({ error: "Invalid credentials" });
     }
@@ -72,26 +60,12 @@ export const login = async (req, res) => {
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET
     );
-
     res.json({ token, user });
   } catch (error) {
     res.status(500).json({ error: "Server error during login" });
   }
 };
 
-// export const getUser = async (req, res) => {
-//     try {
-//         const token = req.header("Authorization");
-//         if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-//         const verified = jwt.verify(token, process.env.JWT_SECRET);
-//         const user = await User.findById(verified.id).select("-password");
-
-//         res.json(user);
-//     } catch (error) {
-//         res.status(500).json({ message: "Invalid Token" });
-//     }
-// }
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -119,15 +93,6 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 };
-
-// export const getAllUsers = async (req, res) => {
-//   try {
-//     const users = await User.find();
-//     res.json(users);
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to fetch users" });
-//   }
-// };
 
 
 export const getAllUsers = async (req, res) => {
@@ -162,25 +127,20 @@ export const getAllUsers = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
-
         // ✅ Admin check karein
         if (req.user.role !== "admin") {
             return res.status(403).json({ error: "Access denied. Only admin can delete users." });
         }
-
         // ✅ User exist karta hai ya nahi?
         const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-
         // ✅ Pehle orders ko handle karein
         await Order.deleteMany({ userId: id });
         await Cart.deleteMany({ userId: id });
-
         // ✅ User ko delete karein
         await User.findByIdAndDelete(id);
-
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
         console.error("Delete User Error:", error);
@@ -201,7 +161,6 @@ export const updatePassword = async (req, res) => {
     if (oldPassword !== user.password) {
       return res.status(400).json({ error: "Invalid old password" });
     }
-
     // ✅ Directly update new password (NO HASHING)
     user.password = newPassword;
 

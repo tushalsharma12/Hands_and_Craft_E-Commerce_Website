@@ -63,6 +63,7 @@ export const getCart = async (req, res) => {
   }
 };
 
+
 export const removeFromCart = async (req, res) => {
   try {
     const { productId } = req.params;
