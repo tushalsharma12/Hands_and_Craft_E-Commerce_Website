@@ -5,12 +5,8 @@ import path from "path";
 // ✅ 1. Get Products By page & Section (Homepage ke liye)
 export const getProducts = async (req, res) => {
   try {
-    const { page, section } = req.query;
-    let filter = {};
-    if (page) filter.page = page;
-    if (section) filter.section = section;
 
-    const products = await Product.find(filter);
+    const products = await Product.find();
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
@@ -164,7 +160,7 @@ export const getAllSections = async (req, res) => {
     res.json(sections);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
-  }
+  } 
 };
 
 export const filterProducts = async (req, res) => {

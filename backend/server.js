@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import express from 'express';
-
 const app = express();
-
 import cors from "cors";
 import path from "path";
 import ProductRoute from "./routes/ProductRoute.js";
@@ -19,13 +17,7 @@ import OrderRoute from "./routes/OrderRoute.js";
 // app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static("uploads"));
 
-
 dotenv.config();
-
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL || "https://your-frontend-domain.vercel.app",
-//   credentials: true
-// }));
 
 app.use(express.json());
 app.use(cors());
@@ -35,13 +27,6 @@ app.use('/api/auth', AutRoute);
 app.use( "/api/cart",CartRoute);
 app.use("/api/payment", Payment);
 app.use("/api/order", OrderRoute);
-
-// app.use( "/api/products3/products3",ProductRoute);
-
-
-// app.use( "/api/products2",Product2Route);
-
-
 
 app.get("/healthz", (req, res) => {
   res.status(200).send("OK");
