@@ -3,7 +3,7 @@ import Order from "../models/Order.js";
 export const order = async (req, res) => {
     try {
         const userId = req.user.userId;
-        const { items, totalAmount } = req.body;
+        const { items, totalAmount, paymentIntentId } = req.body;
 
         console.log("Incoming Order Data:", items);
 
@@ -11,7 +11,8 @@ export const order = async (req, res) => {
             userId,
             items,
             totalAmount,
-            paymentStatus: "paid"
+            paymentStatus: "paid",
+            createdAt: new Date(),
         });
 
         await order.save();
@@ -35,25 +36,26 @@ export const getUserOrders = async (req, res) => {
     try {
         const userId = req.user.userId;
         const orders = await Order.find({ userId })
-        .populate('items.productId', 'title price img discount')// Product details fetch karne ke liye
+            .populate('items.productId', 'title price img discount')
             .sort({ createdAt: -1 })
             .lean();
-            const formattedOrders = orders.map(order => ({
-                ...order,
-                items: order.items.map(item => ({
-                    ...item,
-                    price: item.productId?.price || item.price,
-                    title: item.productId?.title || item.title,
-                    img: item.productId?.img || item.img
-                }))
-            }));
-    
-            console.log('Formatted orders:', formattedOrders); // Debug log
-            res.json(formattedOrders);
+
+        const formattedOrders = orders.map(order => ({
+            ...order,
+            items: order.items.map(item => ({
+                ...item,
+                price: item.productId?.price || item.price,
+                title: item.productId?.title || item.title,
+                img: item.productId?.img || item.img
+            }))
+        }));
+
+        console.log('Formatted orders:', formattedOrders);
+        res.json(formattedOrders);
     } catch (error) {
         console.error("Get orders error:", error);
-        res.status(500).json({ 
-            error: "Failed to fetch orders" 
+        res.status(500).json({
+            error: "Failed to fetch orders"
         });
     }
 };
@@ -63,7 +65,7 @@ export const getUserOrders = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
-        .populate("items.productId", "title price img discount")  // ✅ Yeh ensure karega ki product ki details aayein
+        .populate("items.productId", "title price img ")  // ✅ Yeh ensure karega ki product ki details aayein
             .populate("userId", "name email profilePicture")  // User details fetch karne ke liye
             .sort({ createdAt: -1 })
             .lean();
@@ -87,27 +89,40 @@ export const getAllOrders = async (req, res) => {
 };
 
 // ✅ 2. Update Order Status (Admin)
-export const updateOrderStatus = async (req, res) => {
-    const { orderId } = req.params;
-    const { orderStatus } = req.body;
+// export const updateOrderStatus = async (req, res) => {
+//     const { orderId } = req.params;
+//     const { orderStatus } = req.body;
 
-    try {
-        const updatedOrder = await Order.findByIdAndUpdate(orderId, { orderStatus }, { new: true });
-        res.status(200).json(updatedOrder);
-    } catch (error) {
-        console.error("Update order status error:", error);
-        res.status(500).json({ error: "Failed to update order status" });
-    }
-};
+//     try {
+//         const updatedOrder = await Order.findByIdAndUpdate(orderId, { orderStatus }, { new: true });
+//         res.status(200).json(updatedOrder);
+//     } catch (error) {
+//         console.error("Update order status error:", error);
+//         res.status(500).json({ error: "Failed to update order status" });
+//     }
+// };
 
 // ✅ 3. Delete Order (Admin)
 export const deleteOrder = async (req, res) => {
-    const { orderId } = req.params;
     try {
-        await Order.findByIdAndDelete(orderId);
+        await Order.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: "Order deleted successfully" });
     } catch (error) {
         console.error("Delete order error:", error);
         res.status(500).json({ error: "Failed to delete order" });
     }
 };
+
+
+export const updateOrderStatus = async (req, res) => {
+    try {
+      const order = await Order.findByIdAndUpdate(
+        req.params.id,
+        { orderStatus: req.body.status },
+        { new: true }
+      );
+      res.json(order);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to update status" });
+    }
+  };
