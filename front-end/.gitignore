@@ -1,0 +1,5 @@
+# Dependencies
+/node_modules
+/src/variables/rough.js
+/src/variables/rough.jsx
+.env

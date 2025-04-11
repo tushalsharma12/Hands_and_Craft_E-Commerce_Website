@@ -1,0 +1,19 @@
+/* Default (Inactive) Pagination Dots */
+
+
+.swiper-pagination-bullet {
+    background-color: #cbd5e1; /* Tailwind's bg-gray-400 */
+    opacity: 0.5;
+    transition: all 0.3s ease;
+  }
+  
+  /* Active Pagination Dot */
+  .swiper-pagination-bullet-active {
+    background-color: #ef4444; /* Tailwind's bg-red-500 */
+    opacity: 1;
+  }
+
+  /* img:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+  } */
