@@ -16,7 +16,7 @@ app.use("/uploads", express.static("uploads"));
 dotenv.config();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({origin: '*'}));
 app.use("/api/products", ProductRoute);
 app.use("/api/contact", ContactRoute);
 app.use("/api/auth", AutRoute);
