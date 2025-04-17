@@ -5,11 +5,10 @@ import path from "path";
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 
-
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
   // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;       // ^ = start of the string, $ = end of the string , \s = whitespace, @ = at symbol
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // ^ = start of the string, $ = end of the string , \s = whitespace, @ = at symbol
   if (!emailRegex.test(email)) {
     return res.status(400).json({ error: "Invalid email format" });
   }
@@ -26,7 +25,6 @@ export const register = async (req, res) => {
   res.status(201).json({ message: "User registered successfully", user: user });
 };
 
-
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -38,12 +36,13 @@ export const login = async (req, res) => {
       }
       // Create admin user data
       const adminUser = {
-        _id: "admin_id_123",                                                // Fake ID for admin
+        _id: "admin_id_123", // Fake ID for admin
         name: "Admin",
         email: process.env.ADMIN_EMAIL,
         role: "admin",
       };
-      const token = jwt.sign(                                               // Generate JWT token for admin
+      const token = jwt.sign(
+        // Generate JWT token for admin
         { userId: adminUser._id, role: adminUser.role },
         process.env.JWT_SECRET
       );
@@ -65,7 +64,6 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Server error during login" });
   }
 };
-
 
 export const getUserProfile = async (req, res) => {
   try {
@@ -93,7 +91,6 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 };
-
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -123,31 +120,31 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-
 export const deleteUser = async (req, res) => {
-    try {
-        const { id } = req.params;
-        // ✅ Admin check karein
-        if (req.user.role !== "admin") {
-            return res.status(403).json({ error: "Access denied. Only admin can delete users." });
-        }
-        // ✅ User exist karta hai ya nahi?
-        const user = await User.findById(id);
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        // ✅ Pehle orders ko handle karein
-        await Order.deleteMany({ userId: id });
-        await Cart.deleteMany({ userId: id });
-        // ✅ User ko delete karein
-        await User.findByIdAndDelete(id);
-        res.status(200).json({ message: "User deleted successfully" });
-    } catch (error) {
-        console.error("Delete User Error:", error);
-        res.status(500).json({ error: "Failed to delete user" });
+  try {
+    const { id } = req.params;
+    // ✅ Admin check karein
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ error: "Access denied. Only admin can delete users." });
     }
+    // ✅ User exist karta hai ya nahi?
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    // ✅ Pehle orders ko handle karein
+    await Order.deleteMany({ userId: id });
+    await Cart.deleteMany({ userId: id });
+    // ✅ User ko delete karein
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Delete User Error:", error);
+    res.status(500).json({ error: "Failed to delete user" });
+  }
 };
-
 
 export const updatePassword = async (req, res) => {
   try {

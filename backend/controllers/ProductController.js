@@ -2,10 +2,8 @@ import Product from "../models/Product.js";
 import fs from "fs";
 import path from "path";
 
-// ✅ 1. Get Products By page & Section (Homepage ke liye)
 export const getProducts = async (req, res) => {
   try {
-
     const products = await Product.find();
     res.json(products);
   } catch (error) {
@@ -13,13 +11,11 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// ✅ 2. Add Product (Multer se Image Upload)
 export const addProduct = async (req, res) => {
   try {
     const { title, rating, price, prev_price, discount, page, section } =
       req.body;
 
-    // ✅ Ensure image is uploaded
     if (!req.file) return res.status(400).json({ error: "Image is required" });
 
     const img = `http://localhost:5000/uploads/${req.file.filename}`; // ✅ Correct way to store image path
@@ -43,7 +39,6 @@ export const addProduct = async (req, res) => {
   }
 };
 
-// ✅ 3. Update Product
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -55,7 +50,6 @@ export const updateProduct = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // Delete old image if new image is being uploaded
     if (req.file) {
       if (existingProduct.img) {
         const oldImagePath = path.join(
@@ -86,7 +80,6 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-// ✅ 4. Delete Product
 export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,11 +101,10 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// ✅ Get Single Product by ID
 export const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Requested Product ID:", id); // Check karein ID aa rahi hai ya nahi
+    console.log("Requested Product ID:", id);
 
     if (!id || id.length !== 24) {
       return res.status(400).json({ message: "Invalid Product ID" });
@@ -133,13 +125,11 @@ export const searchProducts = async (req, res) => {
   try {
     const { query } = req.query;
 
-    // If query is empty, return all products
     if (!query) {
       const allProducts = await Product.find();
       return res.json(allProducts);
     }
 
-    // Search by title or category
     const products = await Product.find({
       $or: [
         { title: { $regex: query, $options: "i" } }, // Case-insensitive search in title
@@ -160,7 +150,7 @@ export const getAllSections = async (req, res) => {
     res.json(sections);
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
-  } 
+  }
 };
 
 export const filterProducts = async (req, res) => {

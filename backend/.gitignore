@@ -3,11 +3,16 @@ node_modules/
 
 # Environment variables
 .env
+.env*
 data.json
 data2.json
 .env.local
+!.env.example
+seeder.js
+
 # Uploads directory
 uploads/*
+uploads/
 !uploads/.gitkeep
 
 # Logs

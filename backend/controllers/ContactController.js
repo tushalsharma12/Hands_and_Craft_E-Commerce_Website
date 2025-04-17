@@ -16,7 +16,6 @@ export const submitContactForm = async (req, res) => {
   }
 };
 
-
 export const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ updatedAt: -1 });
