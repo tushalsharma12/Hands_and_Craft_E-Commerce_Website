@@ -18,7 +18,7 @@ export const addProduct = async (req, res) => {
 
     if (!req.file) return res.status(400).json({ error: "Image is required" });
 
-    const img = `http://localhost:5000/uploads/${req.file.filename}`; // ✅ Correct way to store image path
+    const img = `${process.env.VITE_API_BASE_URL}/uploads/${req.file.filename}`; // ✅ Correct way to store image path
 
     const newProduct = new Product({
       title,
@@ -62,7 +62,7 @@ export const updateProduct = async (req, res) => {
           fs.unlinkSync(oldImagePath);
         }
       }
-      updatedData.img = `http://localhost:5000/uploads/${req.file.filename}`;
+      updatedData.img = `${process.env.VITE_API_BASE_URL}/uploads/${req.file.filename}`;
     }
 
     // Update product

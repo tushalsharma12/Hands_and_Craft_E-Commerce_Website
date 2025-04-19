@@ -79,7 +79,7 @@ export const getUserProfile = async (req, res) => {
       name: user.name,
       email: user.email,
       profilePicture: user.profilePicture
-        ? `http://localhost:5000${user.profilePicture}`
+        ? `${process.env.VITE_API_BASE_URL}${user.profilePicture}`
         : null,
       role: user.role,
       // createdAt: user.createdAt,
@@ -103,7 +103,7 @@ export const getAllUsers = async (req, res) => {
         return {
           ...user,
           profilePicture: user.profilePicture
-            ? `http://localhost:5000${user.profilePicture}`
+            ? `${process.env.VITE_API_BASE_URL}${user.profilePicture}`
             : "/backend/uploads/1741196388847-tushal link.jpg",
           orderCount: orders.length,
           totalSpent: orders.reduce((sum, order) => sum + order.totalAmount, 0),
@@ -190,7 +190,7 @@ export const uploadProfilePic = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Profile picture updated successfully!",
-      profilePicUrl: `http://localhost:5000${profilePath}`,
+      profilePicUrl: `${process.env.VITE_API_BASE_URL}${profilePath}`,
     });
   } catch (error) {
     console.error("Upload error:", error);
@@ -216,7 +216,7 @@ export const updateUserProfile = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-        profilePicUrl: `http://localhost:5000${user.profilePicture}`,
+        profilePicUrl: `${process.env.VITE_API_BASE_URL}${user.profilePicture}`,
       },
     });
   } catch (error) {

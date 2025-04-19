@@ -73,7 +73,7 @@ export const getAllOrders = async (req, res) => {
       userId: {
         ...order.userId,
         profilePicture: order.userId?.profilePicture
-          ? `http://localhost:5000${order.userId.profilePicture}`
+          ? `${process.env.VITE_API_BASE_URL}${order.userId.profilePicture}`
           : "/backend/uploads/1741196388847-tushal link.jpg",
       },
     }));

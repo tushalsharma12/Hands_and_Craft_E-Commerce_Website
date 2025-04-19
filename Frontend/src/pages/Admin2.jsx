@@ -48,7 +48,7 @@ const Admin2 = () => {
 
   const handleFilter = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/products/filter`, {
+      const res = await axios.get(`${process.env.VITE_API_BASE_URL}/api/products/filter`, {
         params: {
           page: pageFilter,
           section: sectionFilter,
@@ -68,10 +68,10 @@ const Admin2 = () => {
   const fetchData = async () => {
     try {
       const [productRes, orderRes, contactRes, userRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/products`),
-        axios.get(`http://localhost:5000/api/order`),
-        axios.get(`http://localhost:5000/api/contact/getAllContacts`),
-        axios.get(`http://localhost:5000/api/auth/users`)
+        axios.get(`${process.env.VITE_API_BASE_URL}/api/products`),
+        axios.get(`${process.env.VITE_API_BASE_URL}/api/order`),
+        axios.get(`${process.env.VITE_API_BASE_URL}/api/contact/getAllContacts`),
+        axios.get(`${process.env.VITE_API_BASE_URL}/api/auth/users`)
       ]);
       setProducts(productRes.data);
       setOrders(orderRes.data);
@@ -111,12 +111,12 @@ const Admin2 = () => {
 
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/products/${editId}`, formDataToSend, {
+        await axios.put(`${process.env.VITE_API_BASE_URL}/api/products/${editId}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Product updated successfully");
       } else {
-        await axios.post("http://localhost:5000/api/products/add", formDataToSend, {
+        await axios.post("${process.env.VITE_API_BASE_URL}/api/products/add", formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Product added successfully");
@@ -151,7 +151,7 @@ const Admin2 = () => {
       page: product.page,
       section: product.section,
       img: null,
-      existingImg: product.img.startsWith("http") ? product.img : `http://localhost:5000${product.img}`,
+      existingImg: product.img.startsWith("http") ? product.img : `${process.env.VITE_API_BASE_URL}${product.img}`,
     });
     setEditId(product._id);
     setShowAddProduct(true);
@@ -161,7 +161,7 @@ const Admin2 = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this product?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/products/delete/${id}`);
+        await axios.delete(`${process.env.VITE_API_BASE_URL}/api/products/delete/${id}`);
         setProducts(products.filter((product) => product._id !== id));
         toast.success("Product deleted successfully");
       } catch (error) {
@@ -174,7 +174,7 @@ const Admin2 = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user? This action cannot be undone.");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/auth/delete/${id}`);
+        await axios.delete(`${process.env.VITE_API_BASE_URL}/api/auth/delete/${id}`);
         setUsers(users.filter((user) => user._id !== id));
         toast.success("User deleted successfully");
       } catch (error) {
