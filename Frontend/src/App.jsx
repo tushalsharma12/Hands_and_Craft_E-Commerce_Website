@@ -36,6 +36,8 @@ const ShippingAndDelivery = lazy(() => import("./pages/ShippingAndDelivery.jsx")
 const BlogPage = lazy(() => import("./pages/BlogPage.jsx"));
 const OurVision = lazy(() => import("./pages/OurVision.jsx"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage.jsx"));
+const Services = lazy(() => import("./pages/Services.jsx"));
+
 
 
 function App() {
@@ -53,28 +55,29 @@ function App() {
             <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-              <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
-              <Route path="/ShippingAndDelivery" element={<ShippingAndDelivery />} />
-              <Route path="/BlogPage" element={<BlogPage />} />
-              <Route path="/OurVision" element={<OurVision />} /> 
-              <Route path="/BlogPage/:id" element={<BlogDetailPage />} />
-              <Route path="/Admin2" element={<AdminRoute> <Admin2 /> </AdminRoute>} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/products/:id" element={<ProductDetails />} />
-              <Route path="/Checkout" element={<Elements stripe={stripePromise}><Checkout /></Elements>} />
               <Route path="/Dining" element={<Dining />} />
               <Route path="/Lighting" element={<Lighting />} />
               <Route path="/Decor" element={<Decor />} />
               <Route path="/Garden" element={<Garden />} />
               <Route path="/About" element={<About />} />
               <Route path="/Contact" element={<Contact />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
+              <Route path="/Showmore" element={<Showmore />} />
+              <Route path="/Checkout" element={<Elements stripe={stripePromise}><Checkout /></Elements>} />
+              <Route path="/cart" element={<Cart />} />
               <Route path="/OrdersPage" element={<OrdersPage />} />
               <Route path="/Login" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
-              <Route path="/Showmore" element={<Showmore />} />
+              <Route path="/Admin2" element={<AdminRoute> <Admin2 /> </AdminRoute>} />   
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Settings" element={<Settings />} />
+              <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+              <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
+              <Route path="/Services" element={<Services />} />
+              <Route path="/ShippingAndDelivery" element={<ShippingAndDelivery />} />
+              <Route path="/BlogPage" element={<BlogPage />} />
+              <Route path="/OurVision" element={<OurVision />} /> 
+              <Route path="/BlogPage/:id" element={<BlogDetailPage />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
             </Suspense>
