@@ -36,7 +36,7 @@ export const login = async (req, res) => {
       }
       // Create admin user data
       const adminUser = {
-        _id: "admin_id_123", // Fake ID for admin
+        _id: "64fd58c2a394ab2b8e0df0cd", // Fake ID for admin
         name: "Admin",
         email: process.env.ADMIN_EMAIL,
         role: "admin",
@@ -67,10 +67,19 @@ export const login = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId || req.user.id).select(
-      "-password"
-    );
+    if (req.user.role === "admin") {
+      // Directly return admin profile without querying DB
+      return res.json({
+        name: "Admin",
+        email: process.env.ADMIN_EMAIL,
+        profilePicture: null, // or a default admin pic path
+        role: "admin",
+        createdAt: null,
+        updatedAt: null,
+      });
+    }
 
+    const user = await User.findById(req.user.userId || req.user.id).select("-password");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -82,8 +91,6 @@ export const getUserProfile = async (req, res) => {
         ? `${process.env.VITE_API_BASE_URL}${user.profilePicture}`
         : null,
       role: user.role,
-      // createdAt: user.createdAt,
-      // updatedAt: user.updatedAt,
       createdAt: user.createdAt ? new Date(user.createdAt).toISOString() : null,
       updatedAt: user.updatedAt ? new Date(user.updatedAt).toISOString() : null,
     });
@@ -91,6 +98,7 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user profile" });
   }
 };
+
 
 export const getAllUsers = async (req, res) => {
   try {

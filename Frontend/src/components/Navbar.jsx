@@ -135,24 +135,28 @@ const Navbar = () => {
         fetchSections();
     }, []);
 
+
     useEffect(() => {
+        if (!user ) return;
+    
         const fetchUserProfile = async () => {
-            if (user) {
-                try {
-                    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/profile`, {
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem("token")}`
-                        }
-                    });
-                    const data = await res.json();
-                    setUserProfile(data);
-                } catch (error) {
-                    console.error("Error fetching profile:", error);
-                }
+
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/auth/profile`, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+    
+                setUserProfile(res.data); // axios me response directly parsed hota hai
+            } catch (error) {
+                console.error("Error fetching profile:", error);
             }
         };
+    
         fetchUserProfile();
     }, [user]);
+    
 
 
 

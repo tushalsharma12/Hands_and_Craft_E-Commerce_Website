@@ -1,7 +1,7 @@
 import React from 'react';
 import Heading from '../sections/Heading';
 import Service_1 from '../assets/images/Service_1.png';
-import Service_2 from '../assets/images/Service_2.jpeg';
+import Service_2 from '../assets/images/service_2.jpeg';
 import Service_3 from '../assets/images/Service_3.jpeg';
 import Service_4 from '../assets/images/Service_4.jpg';
 

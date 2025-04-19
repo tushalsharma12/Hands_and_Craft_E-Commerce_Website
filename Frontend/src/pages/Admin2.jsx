@@ -48,7 +48,7 @@ const Admin2 = () => {
 
   const handleFilter = async () => {
     try {
-      const res = await axios.get(`${process.env.VITE_API_BASE_URL}/api/products/filter`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/products/filter`, {
         params: {
           page: pageFilter,
           section: sectionFilter,
@@ -62,16 +62,21 @@ const Admin2 = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      fetchData(); // tabhi call karo jab token ready ho
+    }
   }, []);
+  
 
   const fetchData = async () => {
     try {
       const [productRes, orderRes, contactRes, userRes] = await Promise.all([
-        axios.get(`${process.env.VITE_API_BASE_URL}/api/products`),
-        axios.get(`${process.env.VITE_API_BASE_URL}/api/order`),
-        axios.get(`${process.env.VITE_API_BASE_URL}/api/contact/getAllContacts`),
-        axios.get(`${process.env.VITE_API_BASE_URL}/api/auth/users`)
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/products`),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/order`),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/contact/getAllContacts`),
+        axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/auth/users`)
       ]);
       setProducts(productRes.data);
       setOrders(orderRes.data);
@@ -111,12 +116,12 @@ const Admin2 = () => {
 
     try {
       if (editId) {
-        await axios.put(`${process.env.VITE_API_BASE_URL}/api/products/${editId}`, formDataToSend, {
+        await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/products/${editId}`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Product updated successfully");
       } else {
-        await axios.post("${process.env.VITE_API_BASE_URL}/api/products/add", formDataToSend, {
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/products/add`, formDataToSend, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast.success("Product added successfully");
@@ -151,7 +156,7 @@ const Admin2 = () => {
       page: product.page,
       section: product.section,
       img: null,
-      existingImg: product.img.startsWith("http") ? product.img : `${process.env.VITE_API_BASE_URL}${product.img}`,
+      existingImg: product.img.startsWith("http") ? product.img : `${import.meta.env.VITE_API_BASE_URL}${product.img}`,
     });
     setEditId(product._id);
     setShowAddProduct(true);
@@ -161,7 +166,7 @@ const Admin2 = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this product?");
     if (confirmDelete) {
       try {
-        await axios.delete(`${process.env.VITE_API_BASE_URL}/api/products/delete/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/products/delete/${id}`);
         setProducts(products.filter((product) => product._id !== id));
         toast.success("Product deleted successfully");
       } catch (error) {
@@ -174,7 +179,7 @@ const Admin2 = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user? This action cannot be undone.");
     if (confirmDelete) {
       try {
-        await axios.delete(`${process.env.VITE_API_BASE_URL}/api/auth/delete/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/auth/delete/${id}`);
         setUsers(users.filter((user) => user._id !== id));
         toast.success("User deleted successfully");
       } catch (error) {
@@ -703,10 +708,12 @@ const Admin2 = () => {
 
             {/* Contacts Management */}
             {activeTab === "contacts" && (
+
               <div className="space-y-6 px-4 sm:px-6 lg:px-8">
+                
                 {contacts.map((contact) => (
                   <div
-                    key={contact._id}
+                    key={contact._id || contact.message}
                     className="bg-white rounded-lg shadow-sm p-4 sm:p-6 hover:shadow-md transition-shadow"
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
