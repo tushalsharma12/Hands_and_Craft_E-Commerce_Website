@@ -38,7 +38,3 @@ Welcome to **Hands&Craft**, a fully responsive and feature-rich handcrafted e-co
 | Render     | Backend Deployment              |
 
 ---
-
-## 📁 Project Structure
-
-hands&craft-ecommerce/ │ ├── backend/ # Node.js + Express + MongoDB backend │ ├── controllers/ # Route handlers (products, auth, payment etc.) │ ├── models/ # Mongoose schemas │ ├── routes/ # API routes │ ├── uploads/ # Multer image uploads │ ├── middleware/ # Auth, error handling │ ├── server.js # Backend entry point │ ├── package.json # Backend dependencies │ └── .env # Backend environment variables (not committed) │ ├── frontend/ # React.js + Tailwind CSS frontend │ ├── public/ # Static files │ ├── src/ │ │ ├── assets/ # Images, styles │ │ ├── sections/ # Reusable UI components │ │ ├── pages/ # Page-level components (Home, ProductDetails, Login etc.) │ │ ├── admin/ # Admin panel pages (CRUD for products) │ │ ├── context/ # Context API setup for auth/cart │ │ ├── components/ # Utils (Loader, ScrollToTop), Navbar, Footer, Receipt etc. │ │ └── App.jsx # Frontend entry point │ ├── package.json # Frontend dependencies │ └── .env # Frontend environment variables │ └── README.md # Project documentation
