@@ -10,18 +10,11 @@ import AutRoute from "./routes/AuthRoute.js";
 import CartRoute from "./routes/CartRoute.js";
 import Payment from "./routes/PaymentRoutes.js";
 import OrderRoute from "./routes/OrderRoute.js";
-import fs from "fs";
+
 
 app.use("/uploads", express.static("uploads"));
 
 dotenv.config();
-
-const uploadsPath = path.join(path.resolve(), "uploads");
-if (!fs.existsSync(uploadsPath)) {
-  fs.mkdirSync(uploadsPath);
-  console.log("📁 'uploads' folder created automatically.");
-}
-
 
 app.use(express.json());
 app.use(cors({origin: '*'}));
