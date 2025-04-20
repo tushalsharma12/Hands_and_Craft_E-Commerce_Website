@@ -424,9 +424,16 @@ const Admin2 = () => {
                         className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
                         required
                       >
+                        <option value="">-- Select Page --</option>
                         <option value="Home">Home</option>
-                        <option value="Shop">Shop</option>
+                        <option value="Dining">Dining</option>
+                        <option value="Lighting">Lighting</option>
+                        <option value="Decor">Decor</option>
+                        <option value="Garden">Garden</option>
+                        <option value="ProductDetails">ProductDetails</option>
+                        <option value="Showmore">Showmore</option>
                       </select>
+
                       <select
                         name="section"
                         value={formData.section}
@@ -434,9 +441,56 @@ const Admin2 = () => {
                         className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
                         required
                       >
+                        <option value="">-- Select Section --</option>
                         <option value="Gifts">Gifts</option>
-                        <option value="Featured">Featured</option>
-                        <option value="New">New</option>
+                        <option value="today_big_deals">today_big_deals</option>
+                        <option value="New Arrivals">New Arrivals</option>
+                        <option value="Most Loved">Most Loved</option>
+                        <option value="Indian Art Forms">Indian Art Forms</option>
+                        <option value="explore">explore</option>
+                        <option value="Special Price">Special Price</option>
+                        <option value="Popular">Popular</option>
+                        <option value="SliderImages">SliderImages</option>
+                        <option value="Slider2Images">Slider2Images</option>
+                        <option value="DiningRounded1">DiningRounded1</option>
+                        <option value="DiningRounded2">DiningRounded2</option>
+                        <option value="Drinkware1">Drinkware1</option>
+                        <option value="Drinkware2">Drinkware2</option>
+                        <option value="Tableware1">Tableware1</option>
+                        <option value="Tableware2">Tableware2</option>
+                        <option value="Serveware1">Serveware1</option>
+                        <option value="Serveware2">Serveware2</option>
+                        <option value="Cutlery">Cutlery</option>
+                        <option value="LightingRounded1">LightingRounded1</option>
+                        <option value="LightingRounded2">LightingRounded2</option>
+                        <option value="Festivallight1">Festivallight1</option>
+                        <option value="Festivallight2">Festivallight2</option>
+                        <option value="Lamps1">Lamps1</option>
+                        <option value="Lamps2">Lamps2</option>
+                        <option value="DiyaSet1">DiyaSet1</option>
+                        <option value="DiyaSet2">DiyaSet2</option>
+                        <option value="Candles1">Candles1</option>
+                        <option value="Candles2">Candles2</option>
+                        <option value="DecorRounded1">DecorRounded1</option>
+                        <option value="DecorRounded2">DecorRounded2</option>
+                        <option value="Wall_Decor1">Wall_Decor1</option>
+                        <option value="Wall_Decor2">Wall_Decor2</option>
+                        <option value="Vases1">Vases1</option>
+                        <option value="Vases2">Vases2</option>
+                        <option value="OfficeDesk1">OfficeDesk1</option>
+                        <option value="OfficeDesk2">OfficeDesk2</option>
+                        <option value="BathDecor1">BathDecor1</option>
+                        <option value="BathDecor2">BathDecor2</option>
+                        <option value="GardenRounded1">GardenRounded1</option>
+                        <option value="GardenRounded2">GardenRounded2</option>
+                        <option value="Pots_Planters1">Pots_Planters1</option>
+                        <option value="Pots_Planters2">Pots_Planters2</option>
+                        <option value="Decorative_Hangings1">Decorative_Hangings1</option>
+                        <option value="Decorative_Hangings2">Decorative_Hangings2</option>
+                        <option value="Garden_Decor_Product1">Garden_Decor_Product1</option>
+                        <option value="Garden_Decor_Product2">Garden_Decor_Product2</option>
+                        <option value="More_Garden_Product">More_Garden_Product</option>
+                        <option value="testimonials">testimonials</option>
                       </select>
                       <div className="col-span-2">
                         <input
